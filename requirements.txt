@@ -1,0 +1,7 @@
+semantic-kernel==1.35.0
+python-dotenv==1.1.1
+azure-ai-agents==1.1.0b4
+azure-ai-projects==1.0.0b12
+azure-ai-inference==1.0.0b9
+azure-communication-callautomation==1.4.0
+flask
