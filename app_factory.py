@@ -150,21 +150,17 @@ async def main() -> None:
             # 5. Stop the runtime after the invocation is complete
             await runtime.stop_when_idle()
         finally:
-            print("\nRun complete. Deleting agents...")
+            input(f"Run complete. Press any key to initiate cleanup.")
             await agent_manager.cleanup(client)
             print("All agents deleted successfully.")
-
-            # Ask user if they want to delete the session directory
-            delete_session = input(f"Do you want to delete the session directory '{session_dir}'? (y/n): ").strip().lower()
-            if delete_session == 'y':
-                # Remove the session directory and its contents
-                for root, dirs, files in os.walk(session_dir, topdown=False):
-                    for name in files:
-                        os.remove(os.path.join(root, name))
-                    for name in dirs:
-                        os.rmdir(os.path.join(root, name))
-                os.rmdir(session_dir)
-                print(f"Session directory '{session_dir}' deleted successfully.")
+            # Remove the session directory and its contents
+            for root, dirs, files in os.walk(session_dir, topdown=False):
+                for name in files:
+                    os.remove(os.path.join(root, name))
+                for name in dirs:
+                    os.rmdir(os.path.join(root, name))
+            os.rmdir(session_dir)
+            print(f"Session directory '{session_dir}' deleted successfully.")
 
 
 if __name__ == "__main__":
