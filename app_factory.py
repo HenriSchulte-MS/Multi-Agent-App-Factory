@@ -75,6 +75,7 @@ class AgentManager:
             name="CallOperator",
             instructions=(
                     "You are a call operator. You can initiate calls to a human expert and handle their response. Do not interfere with the development or testing processes."
+                    "The human expert is aware of the task and is expecting your call. You do not need to explain the task to them."
                     "Perform your task and provide feedback on the result. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
             ),
             description="A call operator that can call experts for reviews.",
@@ -140,6 +141,7 @@ async def main() -> None:
                         "3. Run the tests and verify that they have passed successfully."
                         "4. Ensure that a human expert has been called to review the app and that the expert approved the application."
                         "5. If the human expert suggested changes, ensure that the developer has implemented them."
+                        "6. If changes were made, ensure that quality control has been performed again."
                 ),
                 runtime=runtime,
             )
