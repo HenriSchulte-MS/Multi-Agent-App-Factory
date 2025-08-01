@@ -32,6 +32,7 @@ class AgentManager:
                     "Perform your task and provide feedback on the results. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
             ),
             description="A web developer.",
+            temperature=0.3,
         )
         dev_agent = AzureAIAgent(
             client=client,
@@ -60,6 +61,7 @@ class AgentManager:
                 "Perform your task and provide feedback on the results of your tests. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
             ),
             description="A quality assurance specialist.",
+            temperature=0.1,
         )
         qa_agent = AzureAIAgent(
             client=client,
@@ -76,6 +78,7 @@ class AgentManager:
                     "Perform your task and provide feedback on the result. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
             ),
             description="A call operator that can call experts for reviews.",
+            temperature=0.1,
         )
         calling_agent = AzureAIAgent(
             client=client,
