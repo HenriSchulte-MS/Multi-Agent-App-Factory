@@ -12,7 +12,6 @@ from semantic_kernel.contents import ChatMessageContent
 
 from plugins.file_plugin import FilePlugin
 from plugins.call_plugin import CallPlugin
-from plugins.util_plugin import UtilPlugin
 from app_factory_chat_manager import AppFactoryChatManager
 
 
@@ -81,7 +80,7 @@ class AgentManager:
         calling_agent = AzureAIAgent(
             client=client,
             definition=calling_agent_definition,
-            plugins=[CallPlugin(), UtilPlugin()] 
+            plugins=[CallPlugin()] 
         )
 
         self.agents = [dev_agent, qa_agent, calling_agent]
