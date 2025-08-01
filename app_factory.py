@@ -10,7 +10,6 @@ from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
 from semantic_kernel.connectors.mcp import MCPStdioPlugin
 from semantic_kernel.contents import ChatMessageContent
 
-from plugins.test_plugin import TestPlugin
 from plugins.file_plugin import FilePlugin
 from plugins.call_plugin import CallPlugin
 from plugins.util_plugin import UtilPlugin
