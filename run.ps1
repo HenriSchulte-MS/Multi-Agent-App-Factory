@@ -59,28 +59,28 @@ if ($tunnelExists) {
 } else {
     Write-Host "Creating tunnel '$tunnelName'..." -ForegroundColor Yellow
     devtunnel create $tunnelName
-    
+    devtunnel port create -p $tunnelPort
+
     # After creating, get the actual tunnel ID with region
     $tunnelListResponse = devtunnel list --json | ConvertFrom-Json
     $existingTunnels = $tunnelListResponse.tunnels
     $matchingTunnels = $existingTunnels | Where-Object { $_.tunnelId -match "^$tunnelName\.[a-z0-9]+$" }
     $tunnelId = $matchingTunnels[0].tunnelId
-    Write-Host "Tunnel created with ID: $tunnelId" -ForegroundColor Cyan
+    Write-Host "Tunnel created with ID: $tunnelId and port $tunnelPort" -ForegroundColor Cyan
 }
 
 # Now that we have the tunnel ID (with region), construct the URL
 $tunnelId -match "^[^.]+\.([a-z0-9]+)$" | Out-Null
 $tunnelRegion = $matches[1]
-$devTunnelUrl = "https://$tunnelId-$tunnelPort.$tunnelRegion.devtunnels.ms"
-$env:DEV_TUNNEL_URL = $devTunnelUrl
+$devTunnelUrl = "https://$tunnelName-$tunnelPort.$tunnelRegion.devtunnels.ms"
 $env:CALLBACK_URI_HOST = $devTunnelUrl
 
 # Start hosting the tunnel in background
 Write-Host "Starting dev tunnel host..." -ForegroundColor Green
 Start-Job -ScriptBlock { 
-    param($id, $port)
-    devtunnel host $id -p $port --allow-anonymous 
-} -ArgumentList $tunnelId, $tunnelPort -Name "DevTunnel"
+    param($id)
+    devtunnel host $id --allow-anonymous 
+} -ArgumentList $tunnelId -Name "DevTunnel"
 
 # Wait a moment for tunnel to initialize
 Start-Sleep -Seconds 5
