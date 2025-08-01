@@ -73,7 +73,7 @@ if ($tunnelExists) {
 $tunnelId -match "^[^.]+\.([a-z0-9]+)$" | Out-Null
 $tunnelRegion = $matches[1]
 $devTunnelUrl = "https://$tunnelName-$tunnelPort.$tunnelRegion.devtunnels.ms"
-$env:CALLBACK_URI_HOST = $devTunnelUrl
+$env:CALL_SERVER_HOST = $devTunnelUrl
 
 # Start hosting the tunnel in background
 Write-Host "Starting dev tunnel host..." -ForegroundColor Green
