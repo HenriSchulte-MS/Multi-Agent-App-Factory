@@ -24,7 +24,7 @@ TARGET_PHONE_NUMBER = os.getenv("TARGET_PHONE_NUMBER")
 
 # Callback events URI to handle callback events.
 SERVER_HOST = os.getenv("CALL_SERVER_HOST")
-CALLBACK_EVENTS_URI = SERVER_HOST + "/api/callbacks"
+CALLBACK_EVENTS_URI = f"{SERVER_HOST}/api/callbacks"
 COGNITIVE_SERVICES_ENDPOINT = os.getenv("COGNITIVE_SERVICES_ENDPOINT")
 
 # Prompts for text to speech
