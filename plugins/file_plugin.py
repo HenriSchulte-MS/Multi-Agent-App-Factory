@@ -29,3 +29,12 @@ class FilePlugin:
             """
         except Exception as e:
             return f"An error occurred while creating the file at {path}: {str(e)}"
+        
+    @kernel_function(description="Check if a file exists")
+    def file_exists(
+        self,
+        file_name: Annotated[str, "The name of the file to check."],
+    ) -> bool:
+        """Check if a file exists in the base directory."""
+        full_path = os.path.join(self.base_dir, file_name)
+        return os.path.isfile(full_path)

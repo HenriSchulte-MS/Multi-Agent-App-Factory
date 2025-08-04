@@ -28,7 +28,7 @@ class AgentManager:
             instructions=(
                     "You are a web developer with experience building web applications using HTML, CSS and JavaScript. Your goal is to build a web app that meets the requirements."
                     "You write well-documented, well-structured code and are detail-oriented. You do not write code for testing or quality assurance or interfer with those tasks."
-                    "Always create an index.html, a styles.css, and a script.js."
+                    "Always provide an index.html, a styles.css, and a script.js. You can request for these files to be saved to disk"
                     "Perform your task and provide feedback on the results. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
             ),
             description="A web developer.",
@@ -37,6 +37,25 @@ class AgentManager:
         dev_agent = AzureAIAgent(
             client=client,
             definition=dev_agent_definition,
+            plugins=[]
+        )
+
+        # File agent
+        file_agent_definition = await client.agents.create_agent(
+            model=AzureAIAgentSettings().model_deployment_name,
+            name="FileManager",
+            instructions=(
+                    "You are a file manager with experience handling file systems. Your goal is to manage files effectively."
+                    f"Create files on the local file system when instructed. Your working directory is {session_dir}."
+                    "You do not code. Never write files that are not requested by the developer agent."
+                    "Perform your task and provide feedback on the results. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
+            ),
+            description="A file manager.",
+            temperature=0.1,
+        )
+        file_agent = AzureAIAgent(
+            client=client,
+            definition=file_agent_definition,
             plugins=[FilePlugin(base_dir=session_dir)]
         )
 
@@ -87,7 +106,7 @@ class AgentManager:
             plugins=[CallPlugin()] 
         )
 
-        self.agents = [dev_agent, qa_agent, calling_agent]
+        self.agents = [dev_agent, file_agent, qa_agent, calling_agent]
         return self.agents
     
     async def cleanup(self, client):
@@ -160,11 +179,12 @@ async def main() -> None:
                         "Task: Create a web application that is a simple calculator. It must be named Microsoft Calculator."
                         "As a team, you should follow these steps:"
                         "1. Provide complete code for the web application."
-                        "2. Develop a set of tests and execute them."
-                        "3. Run the tests and verify that they have passed successfully."
-                        "4. Ensure that a human expert has been called to review the app and that the expert approved the application."
-                        "5. If the human expert suggested changes, ensure that the developer has implemented them."
-                        "6. If changes were made, ensure that quality control has been performed again."
+                        "2. Ensure that the code files have been created in the session directory."
+                        "3. Develop a set of tests and execute them."
+                        "4. Run the tests and verify that they have passed successfully."
+                        "5. Ensure that a human expert has been called to review the app and that the expert approved the application."
+                        "6. If the human expert suggested changes, ensure that the developer has implemented them."
+                        "7. If changes were made, ensure that quality control has been performed again."
                 ),
                 runtime=runtime,
             )

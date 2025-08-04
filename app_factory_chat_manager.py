@@ -12,13 +12,15 @@ class AppFactoryChatManager(GroupChatManager):
      
     service: ChatCompletionClientBase
     termination_prompt: str = (
-         "You are supervising the development of a web app."
-         "In order for the task to be complete, the following needs to be true:"
-         "1. The developer has provided complete code for the web application."
-         "2. The quality assurance agent has developed a set of tests and executed them."
-         "3. The quality assurance agent has run the tests and they have passed successfully."
-         "4. Ensure that all requirements named in the task description have been met and that a human expert review has been passed."
-         "5. If the human expert suggested changes, ensure that the developer has implemented them."
+        "You are supervising the development of a web app."
+        "In order for the task to be complete, the following needs to be true:"
+        "1. Provide complete code for the web application."
+        "2. Ensure that the code files have been created in the session directory."
+        "3. Develop a set of tests and execute them."
+        "4. Run the tests and verify that they have passed successfully."
+        "5. Ensure that a human expert has been called to review the app and that the expert approved the application."
+        "6. If the human expert suggested changes, ensure that the developer has implemented them."
+        "7. If changes were made, ensure that quality control has been performed again."
          "If all five steps have succeeded, the task is complete. If the task is complete, respond with True, else respond with False."
     )
     selection_prompt: str = (
