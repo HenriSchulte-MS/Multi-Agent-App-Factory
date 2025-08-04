@@ -28,7 +28,8 @@ class AgentManager:
             instructions=(
                     "You are a web developer with experience building web applications using HTML, CSS and JavaScript. Your goal is to build a web app that meets the requirements."
                     "You write well-documented, well-structured code and are detail-oriented. You do not write code for testing or quality assurance or interfer with those tasks."
-                    "Always provide an index.html, a styles.css, and a script.js. You can request for these files to be saved to disk"
+                    "Always provide an index.html, a styles.css, and a script.js. You can request for these files to be saved to disk."
+                    "Only use standard ASCII characters in your code."
                     "Perform your task and provide feedback on the results. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
             ),
             description="A web developer.",
