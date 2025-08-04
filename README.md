@@ -84,7 +84,7 @@ graph TB
 ### 1. Clone and Setup Project
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/HenriSchulte-MS/Multi-Agent-App-Factory
 cd Semantic-Kernel-App-Factory
 ```
 
