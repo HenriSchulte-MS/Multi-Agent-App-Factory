@@ -13,6 +13,64 @@ This application demonstrates a multi-agent system where:
 - A **Call Plugin** enables phone call automation through Azure Communication Services
 - A **Chat Manager** manages the collaboration
 
+```mermaid
+graph TB
+    Main[app_factory.py] --> Runtime[InProcessRuntime]
+    Main --> SessionDir[Session Directory]
+    
+    Main --> AgentMgr[AgentManager]
+    AgentMgr --> DevAgent[Developer Agent]
+    AgentMgr --> FileAgent[File Manager Agent]
+    AgentMgr --> QAAgent[QA Agent]
+    AgentMgr --> CallAgent[Call Operator Agent]
+    
+    Main --> GroupChat[GroupChatOrchestration]
+    GroupChat --> ChatMgr[AppFactoryChatManager]
+    
+    FileAgent --> FilePlugin[FilePlugin]
+    CallAgent --> CallPlugin[CallPlugin]
+    QAAgent --> BrowserPlugin[MCPStdioPlugin]
+    
+    CallPlugin --> CallServer[CallServer]
+    CallServer --> ACS[Azure Communication Services]
+    CallServer --> Cognitive[Azure Cognitive Services]
+    
+    BrowserPlugin --> Playwright[Playwright MCP]
+    
+    DevAgent --> HTML[index.html]
+    DevAgent --> CSS[styles.css]
+    DevAgent --> JS[script.js]
+    FilePlugin --> SessionDir
+    HTML --> SessionDir
+    CSS --> SessionDir
+    JS --> SessionDir
+    
+    DevAgent --> AzureAI[Azure OpenAI]
+    FileAgent --> AzureAI
+    QAAgent --> AzureAI
+    CallAgent --> AzureAI
+    ChatMgr --> AzureAI
+    
+    subgraph Workflow[Workflow Process]
+        Step1[Code Generation]
+        Step2[File Creation]
+        Step3[Testing]
+        Step4[Human Review]
+        Step5[Iteration]
+        
+        Step1 --> Step2
+        Step2 --> Step3
+        Step3 --> Step4
+        Step4 --> Step5
+        Step5 --> Step1
+    end
+    
+    DevAgent -.-> Step1
+    FileAgent -.-> Step2
+    QAAgent -.-> Step3
+    CallAgent -.-> Step4
+```
+
 ## Prerequisites
 
 - Python 3.8 or higher
