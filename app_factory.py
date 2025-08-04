@@ -4,11 +4,11 @@ import os
 
 from azure.identity.aio import DefaultAzureCredential
 
-from semantic_kernel.agents import GroupChatOrchestration, AzureAIAgent, AzureAIAgentSettings, Agent
+from semantic_kernel.agents import GroupChatOrchestration, AzureAIAgent, AzureAIAgentSettings
 from semantic_kernel.agents.runtime import InProcessRuntime
 from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
 from semantic_kernel.connectors.mcp import MCPStdioPlugin
-from semantic_kernel.contents import ChatMessageContent
+from semantic_kernel.contents.streaming_chat_message_content import StreamingChatMessageContent
 
 from plugins.file_plugin import FilePlugin
 from plugins.call_plugin import CallPlugin
@@ -98,8 +98,24 @@ class AgentManager:
             await client.agents.delete_agent(agent_id=agent.id)
 
 
-def agent_response_callback(message: ChatMessageContent) -> None:
-        print(f"**{message.name}**\n{message.content}")
+async def streaming_agent_response_callback(message: StreamingChatMessageContent, is_last: bool) -> None:
+        """Callback to display streaming agent responses in real-time."""
+        if hasattr(message, 'name') and message.name and not hasattr(streaming_agent_response_callback, 'current_agent'):
+            print(f"\n**{message.name}**: ", end="", flush=True)
+            streaming_agent_response_callback.current_agent = message.name
+        elif hasattr(message, 'name') and message.name != getattr(streaming_agent_response_callback, 'current_agent', None):
+            print(f"\n**{message.name}**: ", end="", flush=True)
+            streaming_agent_response_callback.current_agent = message.name
+            
+        # Print the streaming content
+        if message.content:
+            print(message.content, end="", flush=True)
+            
+        # If this is the last chunk, add a separator
+        if is_last:
+            print("\n" + "─" * 50)
+            if hasattr(streaming_agent_response_callback, 'current_agent'):
+                delattr(streaming_agent_response_callback, 'current_agent')
 
 
 async def main() -> None:
@@ -123,7 +139,7 @@ async def main() -> None:
                     service=AzureChatCompletion(),
                     max_rounds=15,
                 ),
-                agent_response_callback=agent_response_callback,
+                streaming_agent_response_callback=streaming_agent_response_callback,
             )
 
             # 2. Create a runtime and start it
