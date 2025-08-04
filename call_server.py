@@ -77,7 +77,7 @@ class CallServer:
         call_connection_client.start_recognizing_media(
             input_type=RecognizeInputType.SPEECH,
             target_participant=target_participant,
-            end_silence_timeout=1,
+            end_silence_timeout=2,
             play_prompt=play_source,
             operation_context="OpenQuestionSpeech",
         )
