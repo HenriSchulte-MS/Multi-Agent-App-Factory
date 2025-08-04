@@ -19,6 +19,7 @@ class AgentManager:
     def __init__(self):
         self.agents = []
         self.browser_plugin = None
+        self.agent_colors = {}
     
     async def create_agents(self, client, session_dir: str):
         # Developer agent
@@ -40,6 +41,7 @@ class AgentManager:
             definition=dev_agent_definition,
             plugins=[]
         )
+        self.agent_colors["Developer"] = "\033[38;2;92;207;230m"  # Cyan
 
         # File agent
         file_agent_definition = await client.agents.create_agent(
@@ -59,6 +61,7 @@ class AgentManager:
             definition=file_agent_definition,
             plugins=[FilePlugin(base_dir=session_dir)]
         )
+        self.agent_colors["FileManager"] = "\033[38;2;255;209;115m"  # Yellow
 
         # Quality Assurance agent
         self.browser_plugin = MCPStdioPlugin(
@@ -89,6 +92,7 @@ class AgentManager:
             definition=qa_agent_definition,
             plugins=[self.browser_plugin]
         )
+        self.agent_colors["QualityAssurance"] = "\033[38;2;213;255;128m"  # Green
 
         # Calling agent
         calling_agent_definition = await client.agents.create_agent(
@@ -107,8 +111,9 @@ class AgentManager:
         calling_agent = AzureAIAgent(
             client=client,
             definition=calling_agent_definition,
-            plugins=[CallPlugin()] 
+            plugins=[CallPlugin()]
         )
+        self.agent_colors["CallOperator"] = "\033[38;2;242;135;121m"  # Orange/Red
 
         self.agents = [dev_agent, file_agent, qa_agent, calling_agent]
         return self.agents
@@ -121,31 +126,37 @@ class AgentManager:
             await client.agents.delete_agent(agent_id=agent.id)
 
 
-async def streaming_agent_response_callback(message: StreamingChatMessageContent, is_last: bool) -> None:
-        """Callback to display streaming agent responses in real-time."""
-        if hasattr(message, 'name') and message.name and not hasattr(streaming_agent_response_callback, 'current_agent'):
-            print(f"\n**{message.name}**: ", end="", flush=True)
-            streaming_agent_response_callback.current_agent = message.name
-        elif hasattr(message, 'name') and message.name != getattr(streaming_agent_response_callback, 'current_agent', None):
-            print(f"\n**{message.name}**: ", end="", flush=True)
-            streaming_agent_response_callback.current_agent = message.name
-            
-        # Print the streaming content
-        if message.content:
-            print(message.content, end="", flush=True)
+def streaming_agent_response_callback(message: StreamingChatMessageContent, is_last: bool, agent_manager) -> None:
+    """Callback to display streaming agent responses in real-time."""
+    reset_color = "\033[0m"
+    
+    # Get color for the current agent
+    color = agent_manager.agent_colors.get(message.name, "\033[37m") if message.name else "\033[37m"
+    
+    # Handle agent name changes
+    if hasattr(message, 'name') and message.name and not hasattr(streaming_agent_response_callback, 'current_agent'):
+        print(f"\n{color}**{message.name}**: ", end="", flush=True)
+        streaming_agent_response_callback.current_agent = message.name
+    elif hasattr(message, 'name') and message.name != getattr(streaming_agent_response_callback, 'current_agent', None):
+        print(f"\n{color}**{message.name}**: ", end="", flush=True)
+        streaming_agent_response_callback.current_agent = message.name
+        
+    # Print the streaming content in the agent's color
+    if message.content:
+        print(f"{color}{message.content}{reset_color}", end="", flush=True)
 
-        # Print function calls if any
-        for item in message.items:
-            if item.content_type == 'function_call':
-                print(f"\n-- Calling function {item.name} with arguments {item.arguments}", end="", flush=True)
-            elif item.content_type == 'function_result':
-                print(f"\nFunction {item.name} returned {item.result}", end="", flush=True)
+    # Print function calls if any
+    for item in message.items:
+        if item.content_type == 'function_call':
+            print(f"\n{color}-- Calling function {item.name} with arguments {item.arguments}{reset_color}", end="", flush=True)
+        elif item.content_type == 'function_result':
+            print(f"\n{color}Function {item.name} returned {item.result}{reset_color}", end="", flush=True)
 
-        # If this is the last chunk, add a separator
-        if is_last:
-            print("\n" + "─" * 50)
-            if hasattr(streaming_agent_response_callback, 'current_agent'):
-                delattr(streaming_agent_response_callback, 'current_agent')
+    # If this is the last chunk, add a separator
+    if is_last:
+        print(f"\n{reset_color}" + "─" * 50)
+        if hasattr(streaming_agent_response_callback, 'current_agent'):
+            delattr(streaming_agent_response_callback, 'current_agent')
 
 
 async def main() -> None:
@@ -169,7 +180,7 @@ async def main() -> None:
                     service=AzureChatCompletion(),
                     max_rounds=15,
                 ),
-                streaming_agent_response_callback=streaming_agent_response_callback,
+                streaming_agent_response_callback=lambda msg, is_last: streaming_agent_response_callback(msg, is_last, agent_manager),
             )
 
             # 2. Create a runtime and start it
