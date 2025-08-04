@@ -18,13 +18,13 @@ class AppFactoryChatManager(GroupChatManager):
         "2. Ensure that the code files have been created in the session directory."
         "3. Develop a set of tests and execute them."
         "4. Run the tests and verify that they have passed successfully."
-        "5. Ensure that a human expert has been called to review the app and that the expert approved the application."
-        "6. If the human expert suggested changes, ensure that the developer has implemented them."
+        "5. Ensure that a human expert has been called to review the app and that the expert explicitly approved the application."
+        "6. If the human expert suggested changes, ensure that the developer has implemented them and that the new code has been saved."
         "7. If changes were made, ensure that quality control has been performed again."
-         "If all five steps have succeeded, the task is complete. If the task is complete, respond with True, else respond with False."
+        "If all steps have succeeded, the task is complete. If the task is complete, respond with True, else respond with False."
     )
     selection_prompt: str = (
-        "You are supervising the development of a web app. The app needs to be developed and then tested."
+        "You are supervising the development of a web app. The app needs to be developed, saved, tested, and reviewed."
         "You must determine which agent should perform the next task."
         "Here are the names and descriptions of the agents: {{$participants}}\n"
         "Respond with only the name of the agent that should perform the next task."
@@ -83,14 +83,16 @@ class AppFactoryChatManager(GroupChatManager):
 
         response = await self.service.get_chat_message_content(
             chat_history,
-            settings=PromptExecutionSettings(response_format=BooleanResult),
+            settings=PromptExecutionSettings(
+                response_format=BooleanResult,
+                temperature=0.1,  # Low temperature for deterministic decisions
+            ),
         )
 
         termination_with_reason = BooleanResult.model_validate_json(response.content)
 
-        print("*********************")
-        print(f"Should terminate: {termination_with_reason.result}\nReason: {termination_with_reason.reason}.")
-        print("*********************")
+        print("**Chat Manager**:")
+        print(f"-- Should terminate: {termination_with_reason.result}\n-- Reason: {termination_with_reason.reason}.")
 
         return termination_with_reason
 
@@ -100,10 +102,8 @@ class AppFactoryChatManager(GroupChatManager):
         chat_history: ChatHistory,
         participant_descriptions: dict[str, str],
     ) -> StringResult:
-        """Provide concrete implementation for selecting the next agent to speak.
-
-        The manager will select the next agent to speak after each agent message
-        or human input (if applicable) if the conversation is not terminated.
+        """
+        The manager will select the next agent to speak after each agent message if the conversation is not terminated.
         """
         chat_history.messages.insert(
             0,
@@ -123,16 +123,18 @@ class AppFactoryChatManager(GroupChatManager):
 
         response = await self.service.get_chat_message_content(
             chat_history,
-            settings=PromptExecutionSettings(response_format=StringResult),
+            settings=PromptExecutionSettings(
+                response_format=StringResult,
+                temperature=0.1,  # Low temperature for consistent agent selection
+            ),
         )
 
         participant_name_with_reason = StringResult.model_validate_json(response.content)
 
-        print("*********************")
+        print("**Chat Manager**:")
         print(
-            f"Next participant: {participant_name_with_reason.result}\nReason: {participant_name_with_reason.reason}."
+            f"-- Next participant: {participant_name_with_reason.result}\n-- Reason: {participant_name_with_reason.reason}."
         )
-        print("*********************")
 
         if participant_name_with_reason.result in participant_descriptions:
             return participant_name_with_reason
@@ -144,8 +146,7 @@ class AppFactoryChatManager(GroupChatManager):
         self,
         chat_history: ChatHistory,
     ) -> MessageResult:
-        """Provide concrete implementation for filtering the results of the discussion.
-
+        """
         The manager will filter the results of the conversation after the conversation is terminated.
         """
         if not chat_history.messages:
@@ -167,7 +168,10 @@ class AppFactoryChatManager(GroupChatManager):
 
         response = await self.service.get_chat_message_content(
             chat_history,
-            settings=PromptExecutionSettings(response_format=StringResult),
+            settings=PromptExecutionSettings(
+                response_format=StringResult,
+                temperature=0.2,  # Slightly higher for creative summarization
+            ),
         )
         string_with_reason = StringResult.model_validate_json(response.content)
 

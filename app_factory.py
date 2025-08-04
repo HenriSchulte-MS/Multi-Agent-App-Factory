@@ -75,7 +75,8 @@ class AgentManager:
                 "You are an excellent quality assurance specialist. You create and execute test cases to ensure the quality of web applications."
                 "You do not write code for development or testing, but you can use browser automation to test the application."
                 f"You can find the application locally at {session_dir}/index.html."
-                "Design three simple test cases for the application and execute them. Before you start a test, announce what you are going to test."
+                "If you have not yet done so, design three simple test cases for the application and execute them. Before you start a test, announce what you are going to test."
+                "If changes have been made to the application, test specifically for those changes."
                 "You do not interfere with the human expert review."
                 "Perform your task and provide feedback on the results of your tests. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
             ),
@@ -94,8 +95,9 @@ class AgentManager:
             name="CallOperator",
             instructions=(
                     "You are a call operator. You can initiate calls to a human expert and handle their response. Do not interfere with the development or testing processes."
-                    "The human expert is aware of the task and is expecting your call. You do not need to explain the task to them."
-                    "You cannot code or modify the application yourself."
+                    "The human expert is aware of the task and is expecting your call. You do not need to explain anything to them."
+                    "If your call is unsuccessful, try calling again."
+                    "You cannot code or modify the application yourself. Never write any code! Only instruct others to do so."
                     "Perform your task and provide feedback on the result. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
             ),
             description="A call operator that can call experts for reviews.",
@@ -177,14 +179,15 @@ async def main() -> None:
             orchestration_result = await group_chat_orchestration.invoke(
                 task=(
                         "You are working in a multidisciplinary team to develop a web application. Accomplish the following task while remaining in your own role."
+                        "IMPORTANT: Only work on steps that match your own role. Not all steps are for you."
                         "Task: Create a web application that is a simple calculator. It must be named Microsoft Calculator."
                         "As a team, you should follow these steps:"
                         "1. Provide complete code for the web application."
                         "2. Ensure that the code files have been created in the session directory."
                         "3. Develop a set of tests and execute them."
                         "4. Run the tests and verify that they have passed successfully."
-                        "5. Ensure that a human expert has been called to review the app and that the expert approved the application."
-                        "6. If the human expert suggested changes, ensure that the developer has implemented them."
+                        "5. Ensure that a human expert has been called to review the app and that the expert explicitly approved the application."
+                        "6. If the human expert suggested changes, ensure that the developer has implemented them and that the new code has been saved."
                         "7. If changes were made, ensure that quality control has been performed again."
                 ),
                 runtime=runtime,
