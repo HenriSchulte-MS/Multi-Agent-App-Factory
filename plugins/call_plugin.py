@@ -27,7 +27,7 @@ class CallPlugin:
         # Initialize the call
         result = self.call_server.make_call(
             start_message=message,
-            end_message="Thank you for your response. Goodbye!"
+            end_message="Thank you for your response. Goodbye."
         )
         
         if "error" in result:
