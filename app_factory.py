@@ -110,7 +110,14 @@ async def streaming_agent_response_callback(message: StreamingChatMessageContent
         # Print the streaming content
         if message.content:
             print(message.content, end="", flush=True)
-            
+
+        # Print function calls if any
+        for item in message.items:
+            if item.content_type == 'function_call':
+                print(f"\n-- Calling function {item.name} with arguments {item.arguments}", end="", flush=True)
+            elif item.content_type == 'function_result':
+                print(f"\nFunction {item.name} returned {item.result}", end="", flush=True)
+
         # If this is the last chunk, add a separator
         if is_last:
             print("\n" + "─" * 50)
