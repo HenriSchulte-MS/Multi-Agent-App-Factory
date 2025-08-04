@@ -47,7 +47,7 @@ class AgentManager:
             instructions=(
                     "You are a file manager with experience handling file systems. Your goal is to manage files effectively."
                     f"Create files on the local file system when instructed. Your working directory is {session_dir}."
-                    "You do not code. Never write files that are not requested by the developer agent."
+                    "You do not code or come up with your own file content. Never write files that are not requested!"
                     "Perform your task and provide feedback on the results. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
             ),
             description="A file manager.",
@@ -95,6 +95,7 @@ class AgentManager:
             instructions=(
                     "You are a call operator. You can initiate calls to a human expert and handle their response. Do not interfere with the development or testing processes."
                     "The human expert is aware of the task and is expecting your call. You do not need to explain the task to them."
+                    "You cannot code or modify the application yourself."
                     "Perform your task and provide feedback on the result. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
             ),
             description="A call operator that can call experts for reviews.",
