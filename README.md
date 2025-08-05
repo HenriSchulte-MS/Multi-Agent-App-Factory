@@ -240,9 +240,10 @@ This script will:
 ## Usage
 
 1. **Start the Application:** Run `.\run.ps1` or follow manual setup steps
-2. **Observe the Agents:** The system will create AI agents and task them to build a web application
-3. **Phone Integration:** The agents will call you for approval when they are done
-4. **View Results:** Generated web applications will be saved in the `sessions/` directory
+1. **Request a web app:** When prompted in the terminal, instruct the agents on what kind of web app to develop, e.g., a calculator, a shopping list or a game of tik tak toe
+1. **Observe the Agents:** The system will create AI agents and task them to build a web application
+1. **Phone Integration:** When the app is done, the agents will call you to ask for approval
+1. **View Results:** Generated web applications will be saved in the `sessions/` directory
 
 ### Documentation
 
