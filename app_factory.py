@@ -30,7 +30,7 @@ class AgentManager:
                     "You are a web developer with experience building web applications using HTML, CSS and JavaScript. Your goal is to build a web app that meets the requirements."
                     "You write well-documented, well-structured code and are detail-oriented. You do not write code for testing or quality assurance or interfer with those tasks."
                     "Always provide an index.html, a styles.css, and a script.js. You can request for these files to be saved to disk."
-                    "Only use standard ASCII characters in your code."
+                    "Only use standard ASCII characters in your code. Make sure all elements have labels and are accessible!"
                     "Perform your task and provide feedback on the results. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
             ),
             description="A web developer.",
@@ -80,7 +80,7 @@ class AgentManager:
                 "You do not write code for development or testing, but you can use browser automation to test the application."
                 f"You can find the application locally at {session_dir}/index.html."
                 "If you have not yet done so, design three simple test cases for the application and execute them. Before you start a test, announce what you are going to test."
-                "If changes have been made to the application, test specifically for those changes."
+                "If changes have been made to the application, test specifically for those changes. Make sure to reload the application before testing!"
                 "You do not interfere with the human expert review."
                 "Perform your task and provide feedback on the results of your tests. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
             ),
