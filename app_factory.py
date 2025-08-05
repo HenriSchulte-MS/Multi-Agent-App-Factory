@@ -187,12 +187,16 @@ async def main() -> None:
             runtime = InProcessRuntime()
             runtime.start()
 
+            # Get task from user
+            task = input("What app would you like the agents to build? ")
+
             # 3. Invoke the orchestration with a task and the runtime
             orchestration_result = await group_chat_orchestration.invoke(
                 task=(
                         "You are working in a multidisciplinary team to develop a web application. Accomplish the following task while remaining in your own role."
                         "IMPORTANT: Only work on steps that match your own role. Not all steps are for you."
-                        "Task: Create a web application that is a simple calculator. It must be named Microsoft Calculator."
+                        f"The team consists of the following agents: {', '.join(agent.name for agent in agents)}."
+                        f"Task: {task}"
                         "As a team, you should follow these steps:"
                         "1. Provide complete code for the web application."
                         "2. Ensure that the code files have been created in the session directory."
