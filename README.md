@@ -6,6 +6,8 @@ A multi-agent demo using Azure AI Foundry Agent Service and Semantic Kernel to b
 
 > **Note:** This is a demonstration application designed for learning and experimentation purposes. It is not intended for production use.
 
+> **Semantic Kernel Version:** This demo is built using Semantic Kernel 1.35.0 (July 2025) and may not work on other versions.
+
 ## Overview
 
 This application demonstrates a multi-agent system where:
@@ -253,6 +255,17 @@ For details on the components used, refer to:
 - [Azure Communication Services Documentation](https://docs.microsoft.com/en-us/azure/communication-services/)
 - [Azure AI Foundry Documentation](https://docs.microsoft.com/en-us/azure/ai-studio/)
 - [Semantic Kernel Documentation](https://learn.microsoft.com/en-us/semantic-kernel/)
+
+## Contributing
+
+You are welcome to contribute to this demo! Whether you're fixing bugs, adding new features, improving documentation, or enhancing the overall experience, your help is appreciated.
+
+### How to Contribute
+
+1. **Fork the repository** and create your feature branch
+2. **Make your changes** with clear, descriptive commit messages
+3. **Test your changes** to ensure they work as expected
+4. **Submit a pull request** with a detailed description of your changes
 
 ---
 
