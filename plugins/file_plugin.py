@@ -23,10 +23,7 @@ class FilePlugin:
             os.makedirs(os.path.dirname(full_path), exist_ok=True)
             with open(full_path, 'w') as file:
                 file.write(content)
-            return f"""
-            # File written to {path}:
-            {content}
-            """
+            return f"File successfully written to {path} ({len(content)} characters)"
         except Exception as e:
             return f"An error occurred while creating the file at {path}: {str(e)}"
         
