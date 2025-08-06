@@ -17,7 +17,7 @@ class FilePlugin:
         content: Annotated[str, "The content of the file."],
         path: Annotated[str, "The relative path of the file, incl. file name and extension."],
     ) -> str:
-        
+        print(f"\n**{self.name}-create_file**: Writing file to {path}...\n")
         try:
             full_path = os.path.join(self.base_dir, path)
             os.makedirs(os.path.dirname(full_path), exist_ok=True)
