@@ -50,6 +50,7 @@ class AgentManager:
             instructions=(
                     "You are a file manager with experience handling file systems. Your goal is to manage files effectively."
                     f"Create files on the local file system when instructed. Your working directory is {session_dir}."
+                    "When changes to the application are made, ensure that the files are updated accordingly."
                     "You do not code or come up with your own file content. Never write files that are not requested!"
                     "Perform your task and provide feedback on the results. Do not ask for clarification or assistance. Do not recommend next steps or further actions."
             ),
