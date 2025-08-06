@@ -1,4 +1,6 @@
-# Semantic Kernel App Factory Demo
+# Multi-Agent App Factory Demo
+
+![Banner](banner.png)
 
 A multi-agent demo using Azure AI Foundry Agent Service and Semantic Kernel to build web applications. Playwright MCP is used for interactive testing and Azure Communication Services keeps the human in the loop with phone call integration.
 
