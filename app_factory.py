@@ -150,7 +150,10 @@ def streaming_agent_response_callback(message: StreamingChatMessageContent, is_l
         if item.content_type == 'function_call':
             print(f"\n{color}-- Calling function {item.name} with arguments {item.arguments}{reset_color}", end="", flush=True)
         elif item.content_type == 'function_result':
-            print(f"\n{color}Function {item.name} returned {item.result}{reset_color}", end="", flush=True)
+            result_str = str(item.result)
+            if len(result_str) > 100:
+                result_str = result_str[:100] + "..."
+            print(f"\n{color}Function {item.name} returned {result_str}{reset_color}", end="", flush=True)
 
     # If this is the last chunk, add a separator
     if is_last:
