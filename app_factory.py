@@ -178,10 +178,17 @@ async def main() -> None:
         agents = await agent_manager.create_agents(client, session_dir)
 
         try:
+            endpoint = AzureAIAgentSettings().endpoint.split('/api')[0].rstrip('/') + '/' # Remove project ID from Azure AI Agent endpoint to utilize it for Azure OpenAI authentication
+            model_name = AzureAIAgentSettings().model_deployment_name
+            service = AzureChatCompletion(
+                endpoint=endpoint,
+                deployment_name=model_name
+            )
+
             group_chat_orchestration = GroupChatOrchestration(
                 members=agents,
                 manager=AppFactoryChatManager(
-                    service=AzureChatCompletion(),
+                    service=service,
                     max_rounds=15,
                 ),
                 streaming_agent_response_callback=lambda msg, is_last: streaming_agent_response_callback(msg, is_last, agent_manager),
