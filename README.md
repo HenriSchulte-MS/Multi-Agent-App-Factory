@@ -130,20 +130,16 @@ npm install -g @playwright/mcp@latest
    - Note the project endpoint
 
 2. **Deploy Models:**
-   - Deploy `gpt-4o-nano` for the AI Agents (or any model supported by the Foundry Agent Service)
+   - Deploy `gpt-4.1` for the AI Agents (or any model supported by the Foundry Agent Service)
    - (Optional) Deploy another model for the agent manager
    - Note the deployment names
 
 3. **Configure Environment Variables:**
    ```
    AZURE_AI_AGENT_ENDPOINT = "https://<resource-name>.services.ai.azure.com/api/projects/<project-name>"
-   AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME = "<your-model-deployment-name-for-agents>"
-   AZURE_OPENAI_ENDPOINT = "https://<resource-name>.cognitiveservices.azure.com/"
-   AZURE_OPENAI_API_KEY = "<your-api-key>"
-   AZURE_OPENAI_CHAT_DEPLOYMENT_NAME = "<your-model-deployment-name-for-chat-management"
-   COGNITIVE_SERVICES_ENDPOINT=https://<resource-name>.cognitiveservices.azure.com/
+   AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME = "<your-model-deployment-name>" # e.g., "gpt-4.1"
    ```
-   - You can use the same Foundry resource for all three endpoints
+   - Ensure you are using a [Foundry project](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/create-projects?tabs=ai-foundry&pivots=fdp-project).
 
 ### 2. Azure Communication Services Setup
 
@@ -157,7 +153,7 @@ npm install -g @playwright/mcp@latest
 
 3. **Configure Environment Variables:**
    ```
-   ACS_CONNECTION_STRING=endpoint=https://<resource-name>.<geo>.communication.azure.com/;accesskey=<your-access-key>
+   ACS_ENDPOINT="https://<resource-name>.<geo>.communication.azure.com/"
    ACS_PHONE_NUMBER=<your-acs-phone-number>
    TARGET_PHONE_NUMBER=<your-target-phone-number>
    ```
@@ -243,6 +239,7 @@ This script will:
 
 ## Usage
 
+1. **Log into Azure CLI**: Run `az login` and login with your Azure account
 1. **Start the Application:** Run `.\run.ps1` or follow manual setup steps
 1. **Request a web app:** When prompted in the terminal, instruct the agents on what kind of web app to develop, e.g., a calculator, a shopping list or a game of tik tak toe
 1. **Observe the Agents:** The system will create AI agents and task them to build a web application
