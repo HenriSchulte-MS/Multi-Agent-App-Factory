@@ -161,7 +161,7 @@ npm install -g @playwright/mcp@latest
 ### 3. Connect Azure Communication Services with Azure AI Services
 
 Follow the official Microsoft documentation for integrating ACS with Azure Cognitive Services:
-[Azure Communication Services and Azure Cognitive Services Integration](https://learn.microsoft.com/en-us/azure/communication-services/concepts/call-automation/azure-communication-services-azure-cognitive-services-integration)
+[Azure Communication Services and Azure Cognitive Services Integration](https://learn.microsoft.com/en-us/azure/communication-services/concepts/call-automation/azure-communication-services-azure-cognitive-services-integration#connecting-through-the-azure-portal)
 
 This integration enables:
 - Speech-to-text conversion during calls
