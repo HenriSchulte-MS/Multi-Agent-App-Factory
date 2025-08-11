@@ -26,11 +26,11 @@ TARGET_PHONE_NUMBER = os.getenv("TARGET_PHONE_NUMBER")
 # Callback events URI to handle callback events.
 SERVER_HOST = os.getenv("CALL_SERVER_HOST")
 CALLBACK_EVENTS_URI = f"{SERVER_HOST}/api/callbacks"
-COGNITIVE_SERVICES_ENDPOINT = os.getenv("COGNITIVE_SERVICES_ENDPOINT")
 
-# Prompts for text to speech
+# Speech recognition and synthesis
 SPEECH_TO_TEXT_VOICE = os.getenv("SPEECH_TO_TEXT_VOICE", "en-US-NancyNeural")
-
+FOUNDRY_PROJECT_ENDPOINT = os.getenv("AZURE_AI_AGENT_ENDPOINT")
+COGNITIVE_SERVICES_ENDPOINT = os.getenv("COGNITIVE_SERVICES_ENDPOINT")
 
 class CallServer:
     def __init__(self):
@@ -42,6 +42,18 @@ class CallServer:
         )
         self.app = Flask(__name__)
         self.setup_routes()
+
+        # Derive cognitive services endpoint from Foundry project endpoint if not set
+        if COGNITIVE_SERVICES_ENDPOINT:
+            self.ai_endpoint = COGNITIVE_SERVICES_ENDPOINT
+        else:
+            self.ai_endpoint = (
+                    "https://"
+                    + FOUNDRY_PROJECT_ENDPOINT.split("://")[1].split("/")[0]
+                        .replace(".services.ai.azure.com", ".cognitiveservices.azure.com")
+                    + "/"
+            )
+        
         
         # Single call management
         self.current_call_id: Optional[str] = None
@@ -106,7 +118,7 @@ class CallServer:
         call_connection_properties = self.call_automation_client.create_call(
             target_participant=target_participant,
             callback_url=CALLBACK_EVENTS_URI,
-            cognitive_services_endpoint=COGNITIVE_SERVICES_ENDPOINT,
+            cognitive_services_endpoint=self.ai_endpoint,
             source_caller_id_number=source_caller
         )
         
