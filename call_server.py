@@ -6,6 +6,7 @@ from azure.communication.callautomation import (
     RecognizeInputType,
     TextSource)
 from azure.core.messaging import CloudEvent
+from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 import os
 from typing import Optional
@@ -13,8 +14,8 @@ from typing import Optional
 # Load environment variables from .env file
 load_dotenv()
 
-# Your ACS resource connection string
-ACS_CONNECTION_STRING = os.getenv("ACS_CONNECTION_STRING")
+# Your ACS resource endpoint
+ACS_ENDPOINT = os.getenv("ACS_ENDPOINT")
 
 # Your ACS resource phone number will act as source number to start outbound call
 ACS_PHONE_NUMBER = os.getenv("ACS_PHONE_NUMBER")
@@ -35,7 +36,10 @@ class CallServer:
     def __init__(self):
         self.start_message = "dummy start message"
         self.end_message = "dummy end message"
-        self.call_automation_client = CallAutomationClient.from_connection_string(ACS_CONNECTION_STRING)
+        self.call_automation_client = CallAutomationClient(
+            endpoint=ACS_ENDPOINT,
+            credential=DefaultAzureCredential()
+        )
         self.app = Flask(__name__)
         self.setup_routes()
         
