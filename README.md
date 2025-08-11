@@ -162,8 +162,6 @@ npm install -g @playwright/mcp@latest
    TARGET_PHONE_NUMBER=<your-target-phone-number>
    ```
 
-### 2. Azure Communication Services Setup
-
 ### 3. Connect Azure Communication Services with Azure AI Services
 
 Follow the official Microsoft documentation for integrating ACS with Azure Cognitive Services:
