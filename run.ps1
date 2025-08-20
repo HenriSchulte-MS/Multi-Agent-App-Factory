@@ -85,16 +85,6 @@ Start-Job -ScriptBlock {
 # Wait a moment for tunnel to initialize
 Start-Sleep -Seconds 5
 
-# # Start the calling server in background
-# Write-Host "Starting calling server..." -ForegroundColor Green
-# Start-Job -ScriptBlock { 
-#     Set-Location $using:PWD
-#     python calling_server.py 
-# } -Name "CallingServer"
-
-# Wait a moment
-Start-Sleep -Seconds 2
-
 # Start the main app
 Write-Host "Starting main app..." -ForegroundColor Green
 python app_factory.py
